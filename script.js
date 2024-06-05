@@ -123,6 +123,8 @@ const addElementTemplates = {
 
 };
 
+
+
 // Function to save the current caret position
 function saveCaretPosition() {
   var selection = window.getSelection();
