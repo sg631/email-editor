@@ -47,6 +47,7 @@ const addElementTemplates = {
             "Helvetica": "Helvetica",
             "sans-serif": "Sans Serif",
             "Times New Roman": "Times New Roman",
+            "Rubik": "Rubik",
           },
         },
       },
@@ -306,17 +307,9 @@ document.getElementById("toggle-advanced-properties").addEventListener("click", 
 });
 
 // Handle font and font size changes
-document.getElementById("font-selector").addEventListener("change", function() {
+document.getElementById("font-selector").addEventListener("click", function() {
   document.execCommand("fontName", false, this.value);
-});
-
-document.getElementById("font-size-selector").addEventListener("input", function() {
-  document.execCommand("fontSize", false, "7"); // Use 7 as a placeholder
-  const fontSizeElements = editor.querySelectorAll("font[size='7']");
-  fontSizeElements.forEach((element) => {
-    element.removeAttribute("size");
-    element.style.fontSize = this.value + "px";
-  });
+  document.execCommand("fontSize", false, document.getElementById("font-size-selector").value);
 });
 
 // Dropdown toggle functionality
