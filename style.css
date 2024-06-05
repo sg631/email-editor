@@ -122,12 +122,3 @@ button:active {
 #properties-form h3 {
   margin-top: 0;
 }
-
-#font-selector {
-  margin-left: 10px;
-}
-
-#font-size-selector {
-  margin-left: 10px;
-  width: 60px;
-}

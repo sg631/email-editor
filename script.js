@@ -47,39 +47,38 @@ const addElementTemplates = {
             "Helvetica": "Helvetica",
             "sans-serif": "Sans Serif",
             "Times New Roman": "Times New Roman",
-            "Rubik": "Rubik",
           },
         },
       },
       "font-size": { 
         displayName: "Font Size",
-        defaultValue: "20px", 
-        type: "number",
+        defaultValue: "20px",
+        type: "text",
         typeSpecificInfo: {},
       },
       "height": { 
         displayName: "Height",
-        defaultValue: "50px", 
-        type: "number",
+        defaultValue: "35px",
+        type: "text",
         typeSpecificInfo: {},
       },
       "width": { 
         displayName: "Width",
-        defaultValue: "150px", 
-        type: "number",
+        defaultValue: "100%",
+        type: "text",
         typeSpecificInfo: {},
       },
       "onclick": { 
         displayName: "On Click",
-        defaultValue: "alert('Hello!')", 
-        type: "code",
+        defaultValue: "alert('Button Clicked')",
+        type: "text",
         typeSpecificInfo: {},
       },
     },
   },
   fixedhighlight: {
-    html: "<div style='~css~'>Highlighted Text</div>",
-    css: "background-color: yellow; font-family: Arial; font-size: 20px;",
+    html: "<span style='~css~'>Highlight</span>",
+    css: "background-color: ~highlight-color~;",
     js: "",
     specialHandlers: {
       specialElementHandlerOn: false,
@@ -88,37 +87,17 @@ const addElementTemplates = {
       specialCodeHandlerID: "",
     },
     options: {
-      "background-color": { 
-        displayName: "Background Color",
-        defaultValue: "yellow",
+      "highlight-color": {
+        displayName: "Color",
+        defaultValue: "rgb(225, 225, 225)",
         type: "color",
-        typeSpecificInfo: {},
-      },
-      "font-family": {
-        displayName: "Font",
-        defaultValue: "Arial",
-        type: "dropdown",
-        typeSpecificInfo: {
-          dropdownOptions: {
-            "Roboto": "Roboto",
-            "Arial": "Arial",
-            "Helvetica": "Helvetica",
-            "sans-serif": "Sans Serif",
-            "Times New Roman": "Times New Roman",
-          },
-        },
-      },
-      "font-size": { 
-        displayName: "Font Size",
-        defaultValue: "20px", 
-        type: "number",
         typeSpecificInfo: {},
       },
     },
   },
   colortext: {
-    html: "<span style='~css~'>Colored Text</span>",
-    css: "color: ~color~; font-family: Arial; font-size: 20px;",
+    html: "<span style='~css~'></span>",
+    css: "color: ~color~;",
     js: "",
     specialHandlers: {
       specialElementHandlerOn: false,
@@ -127,197 +106,270 @@ const addElementTemplates = {
       specialCodeHandlerID: "",
     },
     options: {
-      "color": { 
-        displayName: "Text Color",
-        defaultValue: "blue",
+      "color": {
+        displayName: "Color",
+        defaultValue: "black",
         type: "color",
         typeSpecificInfo: {},
       },
-      "font-family": {
-        displayName: "Font",
-        defaultValue: "Arial",
-        type: "dropdown",
-        typeSpecificInfo: {
-          dropdownOptions: {
-            "Roboto": "Roboto",
-            "Arial": "Arial",
-            "Helvetica": "Helvetica",
-            "sans-serif": "Sans Serif",
-            "Times New Roman": "Times New Roman",
-          },
-        },
-      },
-      "font-size": { 
-        displayName: "Font Size",
-        defaultValue: "20px", 
-        type: "number",
+      "default-text":{
+        displayName: "Default Text",
+        defaultValue: "Text",
+        type: "text",
         typeSpecificInfo: {},
-      },
+      }
     },
   },
+
 };
 
-function addElement() {
-  const newElementInfo = addElementTemplates[selectedType];
-  let newElementHTML = newElementInfo.html;
-  let newElementCSS = newElementInfo.css;
-  let newElementJS = newElementInfo.js;
-
-  const allOptions = Object.keys(newElementInfo.options);
-  allOptions.forEach((optionKey) => {
-    const inputElem = document.querySelector(`[data-key="${optionKey}"]`);
-    const value = inputElem.value;
-    const cssToReplace = newElementInfo.options[optionKey].displayName;
-    const cssPattern = new RegExp("~" + optionKey + "~", "g");
-    newElementCSS = newElementCSS.replace(cssPattern, value);
-  });
-
-  newElementHTML = newElementHTML.replace("~css~", newElementCSS);
-  newElementHTML = newElementHTML.replace("~onclick~", newElementInfo.options["onclick"].defaultValue);
-
-  const advancedHTML = document.getElementById("custom-html").value;
-  const advancedCSS = document.getElementById("custom-css").value;
-  const advancedJS = document.getElementById("custom-js").value;
-
-  if (advancedHTML) {
-    newElementHTML = advancedHTML;
-  }
-
-  if (advancedCSS) {
-    newElementCSS = advancedCSS;
-  }
-
-  if (advancedJS) {
-    newElementJS = advancedJS;
-  }
-
-  newElementHTML = newElementHTML.replace("~css~", newElementCSS);
-  newElementHTML = newElementHTML.replace("~onclick~", newElementInfo.options["onclick"].defaultValue);
-
-  restoreCaretPosition();
-  document.execCommand("insertHTML", false, newElementHTML);
-  resetPropertiesForm();
-}
-
-function showPropertiesForm() {
-  const propertiesForm = document.getElementById("properties-form");
-  propertiesForm.style.display = "block";
-  propertiesForm.innerHTML = "";
-
-  const newElementInfo = addElementTemplates[selectedType];
-  const allOptions = Object.keys(newElementInfo.options);
-
-  allOptions.forEach((optionKey) => {
-    const optionInfo = newElementInfo.options[optionKey];
-    const optionDisplayName = optionInfo.displayName;
-    const optionDefaultValue = optionInfo.defaultValue;
-    const optionType = optionInfo.type;
-
-    let inputElem;
-    if (optionType === "text") {
-      inputElem = document.createElement("input");
-      inputElem.type = "text";
-      inputElem.value = optionDefaultValue;
-    } else if (optionType === "number") {
-      inputElem = document.createElement("input");
-      inputElem.type = "number";
-      inputElem.value = optionDefaultValue.replace(/[^0-9.]/g, "");
-    } else if (optionType === "color") {
-      inputElem = document.createElement("input");
-      inputElem.type = "color";
-      inputElem.value = optionDefaultValue;
-    } else if (optionType === "dropdown") {
-      inputElem = document.createElement("select");
-      const dropdownOptions = optionInfo.typeSpecificInfo.dropdownOptions;
-      Object.keys(dropdownOptions).forEach((dropdownOptionKey) => {
-        const optionElem = document.createElement("option");
-        optionElem.value = dropdownOptionKey;
-        optionElem.textContent = dropdownOptions[dropdownOptionKey];
-        if (dropdownOptionKey === optionDefaultValue) {
-          optionElem.selected = true;
-        }
-        inputElem.appendChild(optionElem);
-      });
-    } else if (optionType === "code") {
-      inputElem = document.createElement("textarea");
-      inputElem.value = optionDefaultValue;
-    }
-
-    inputElem.setAttribute("data-key", optionKey);
-    const label = document.createElement("label");
-    label.textContent = optionDisplayName;
-
-    const container = document.createElement("div");
-    container.appendChild(label);
-    container.appendChild(inputElem);
-
-    propertiesForm.appendChild(container);
-  });
-
-  const addButton = document.createElement("button");
-  addButton.textContent = "Add Element";
-  addButton.addEventListener("click", function (event) {
-    event.preventDefault();
-    addElement();
-  });
-
-  propertiesForm.appendChild(addButton);
-}
-
-document.getElementById("add-element-bttn").addEventListener("click", function(event) {
-  event.preventDefault();
-  showPropertiesForm();
-});
-
+// Function to save the current caret position
 function saveCaretPosition() {
   var selection = window.getSelection();
   if (selection.rangeCount > 0) {
-    savedRange = selection.getRangeAt(0);
+    savedRange = selection.getRangeAt(0).cloneRange();
   }
 }
 
+// Function to restore the saved caret position
 function restoreCaretPosition() {
+  var selection = window.getSelection();
   if (savedRange) {
-    var selection = window.getSelection();
     selection.removeAllRanges();
     selection.addRange(savedRange);
   }
 }
 
-document.getElementById("add-stuff-bttn").addEventListener("click", function() {
-  selectedType = 'button';
-  showPropertiesForm();
-});
+// Function to generate HTML with the CSS replaced by template values
+function generateElementHTML(template, values) {
+  let html = template.html;
+  let css = template.css;
+  let js = template.js;
 
-document.getElementById("add-stuff-dropdown").addEventListener("click", function(event) {
-  selectedType = event.target.getAttribute("data-type");
-  showPropertiesForm();
-});
-
-// Toggle the advanced properties section
-document.getElementById("toggle-advanced-properties").addEventListener("click", function() {
-  var advancedProperties = document.getElementById("advanced-properties");
-  if (advancedProperties.style.display === "none") {
-    advancedProperties.style.display = "block";
-    this.textContent = "Hide Advanced Properties";
-  } else {
-    advancedProperties.style.display = "none";
-    this.textContent = "Show Advanced Properties";
+  // Replace placeholders in HTML, CSS, and JS
+  for (let option in values) {
+    const regex = new RegExp(`~${option}~`, 'g');
+    html = html.replace(regex, values[option]);
+    css = css.replace(regex, values[option]);
+    js = js.replace(regex, values[option]);
   }
-});
 
-// Handle font and font size changes
-document.getElementById("font-selector").addEventListener("click", function() {
-  document.execCommand("fontName", false, this.value);
-  document.execCommand("fontSize", false, document.getElementById("font-size-selector").value);
-});
+  return { html: html.replace('~css~', css), css: css, js: js };
+}
 
-// Dropdown toggle functionality
-document.getElementById("dropdown-button").addEventListener("click", function() {
-  const dropdownMenu = document.getElementById("add-stuff-dropdown");
-  if (dropdownMenu.style.display === "block") {
-    dropdownMenu.style.display = "none";
-  } else {
-    dropdownMenu.style.display = "block";
+// Add event listeners to input fields to update advanced properties fields
+function addInputEventListeners() {
+  document.querySelectorAll('#element-properties input[type="text"], #element-properties input[type="color"], #element-properties select').forEach(input => {
+    input.addEventListener('input', updateAdvancedProperties);
+  });
+}
+
+// Function to update advanced properties fields
+function updateAdvancedProperties() {
+  const htmlField = document.getElementById("custom-html");
+  const cssField = document.getElementById("custom-css");
+  const jsField = document.getElementById("custom-js");
+
+  const values = {};
+  document.querySelectorAll('#element-properties input[type="text"], #element-properties input[type="color"], #element-properties select').forEach(input => {
+    values[input.name] = input.value;
+  });
+
+  const template = addElementTemplates[selectedType];
+  const updatedElements = generateElementHTML(template, values);
+
+  htmlField.value = updatedElements.html;
+  cssField.value = updatedElements.css;
+  jsField.value = updatedElements.js;
+}
+
+// Function to show the properties form
+function showPropertiesForm(type) {
+  const template = addElementTemplates[type];
+  const form = document.getElementById("element-properties");
+  form.innerHTML = ""; // Clear previous form inputs
+
+  for (let option in template.options) {
+    const optionData = template.options[option];
+    const label = document.createElement("label");
+    label.textContent = optionData.displayName;
+    form.appendChild(label);
+
+    let input;
+    switch (optionData.type) {
+      case "text":
+      case "number":
+        input = document.createElement("input");
+        input.type = optionData.type;
+        input.name = option;
+        input.value = optionData.defaultValue;
+        break;
+      case "color":
+        input = document.createElement("input");
+        input.type = "color";
+        input.name = option;
+        input.value = optionData.defaultValue;
+        break;
+      case "dropdown":
+        input = document.createElement("select");
+        input.name = option;
+        for (let key in optionData.typeSpecificInfo.dropdownOptions) {
+          const optionElement = document.createElement("option");
+          optionElement.value = key;
+          optionElement.textContent = optionData.typeSpecificInfo.dropdownOptions[key];
+          input.appendChild(optionElement);
+        }
+        input.value = optionData.defaultValue;
+        break;
+      default:
+        continue; // Skip if type is not handled
+    }
+
+    form.appendChild(input);
+    form.appendChild(document.createElement("br"));
   }
+
+  // Handle special element handlers
+  if (template.specialHandlers.specialElementHandlerOn) {
+    handleSpecialElementHandler(template.specialHandlers.specialElementHandlerID);
+  }
+
+  // Set advanced properties to default values
+  document.getElementById("custom-html").value = template.html;
+  document.getElementById("custom-css").value = template.css;
+  document.getElementById("custom-js").value = template.js;
+
+  addInputEventListeners();
+  document.getElementById("properties-form").style.display = "block";
+}
+
+// Handle special element handlers
+function handleSpecialElementHandler(handlerID) {
+  switch (handlerID) {
+    case "font-size-handler":
+      showFontSizeHandler();
+      break;
+    // Add more cases as needed for different handlers
+  }
+}
+
+// Example special element handler function
+function showFontSizeHandler() {
+  const fontSizeInput = document.createElement("input");
+  fontSizeInput.type = "range";
+  fontSizeInput.min = "8";
+  fontSizeInput.max = "72";
+  fontSizeInput.value = "20"; // Default value
+  fontSizeInput.addEventListener("input", (event) => {
+    document.querySelector('input[name="font-size"]').value = event.target.value + "px";
+    updateAdvancedProperties();
+  });
+  document.getElementById("element-properties").prepend(fontSizeInput);
+}
+
+// Handle special code handlers
+function handleSpecialCodeHandler(handlerID, values) {
+  switch (handlerID) {
+    case "example-code-handler":
+      return exampleCodeHandler(values);
+    // Add more cases as needed for different handlers
+  }
+}
+
+// Example special code handler function
+function exampleCodeHandler(values) {
+  // Modify values as needed based on special logic
+  values["border"] = "2px solid red";
+  return values;
+}
+
+// Toggle dropdown menu visibility
+document.getElementById("dropdown-button").addEventListener("click", () => {
+  var dropdownMenu = document.getElementById("add-stuff-dropdown");
+  dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
 });
+
+// Handle dropdown item selection
+document.querySelectorAll('.dropdown-menu li').forEach(item => {
+  item.addEventListener('click', (event) => {
+    selectedType = event.target.getAttribute('data-type');
+    showPropertiesForm(selectedType);
+
+    // Change the main button text
+    var button = document.getElementById("add-stuff-bttn");
+    button.innerHTML = `Add ${event.target.innerText}`;
+    updateAdvancedProperties();
+    // Hide the dropdown menu
+    document.getElementById("add-stuff-dropdown").style.display = 'none';
+  });
+});
+
+// Add element on main button click
+document.getElementById("add-element-bttn").addEventListener("click", () => {
+  const form = document.getElementById("element-properties");
+  const values = {};
+  for (let element of form.elements) {
+    values[element.name] = element.value;
+  }
+
+  // Handle special code handlers
+  if (addElementTemplates[selectedType].specialHandlers.specialCodeHandlerOn) {
+    values = handleSpecialCodeHandler(addElementTemplates[selectedType].specialHandlers.specialCodeHandlerID, values);
+  }
+
+  // Use custom values if advanced properties are shown
+  const useCustomHTML = document.getElementById("custom-html").value;
+  const useCustomCSS = document.getElementById("custom-css").value;
+  const useCustomJS = document.getElementById("custom-js").value;
+
+  const template = addElementTemplates[selectedType];
+  let elementHTML;
+  if (useCustomHTML && useCustomCSS) {
+    elementHTML = useCustomHTML.replace('~css~', useCustomCSS);
+  } else {
+    const generatedElement = generateElementHTML(template, values);
+    elementHTML = generatedElement.html;
+  }
+
+  // Restore caret position and insert the element
+  restoreCaretPosition();
+
+  // Insert the HTML using range.insertNode instead of execCommand
+  let tempDiv = document.createElement('div');
+  tempDiv.innerHTML = elementHTML;
+  let node = tempDiv.firstChild;
+  savedRange.insertNode(node);
+  savedRange.setStartAfter(node);
+  savedRange.setEndAfter(node);
+  window.getSelection().removeAllRanges();
+  window.getSelection().addRange(savedRange);
+
+  if (useCustomJS) {
+    const script = document.createElement('script');
+    script.innerHTML = useCustomJS;
+    document.body.appendChild(script);
+  }
+
+  document.getElementById("properties-form").style.display = "none"; // Hide properties form
+});
+
+// Toggle advanced properties visibility
+document.getElementById("toggle-advanced-properties").addEventListener("click", () => {
+  const advancedProperties = document.getElementById("advanced-properties");
+  advancedProperties.style.display = advancedProperties.style.display === 'block' ? 'none' : 'block';
+  const toggleButton = document.getElementById("toggle-advanced-properties");
+  toggleButton.innerHTML = advancedProperties.style.display === 'block' ? 'Hide Advanced Properties' : 'Show Advanced Properties';
+});
+
+// Close the dropdown if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropdown-button') && !event.target.closest('.dropdown-button')) {
+    var dropdowns = document.getElementsByClassName("dropdown-menu");
+    for (var i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.style.display === 'block') {
+        openDropdown.style.display = 'none';
+      }
+    }
+  }
+};
