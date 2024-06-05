@@ -1,0 +1,133 @@
+html {
+  height: 100%;
+  width: 100%;
+  font-family: sans-serif;
+}
+
+div#editor {
+  display: inline;
+  position: absolute;
+  left: 0px;
+  top: 10%;
+  width: calc(100% - 20px);
+  padding: 10px;
+  height: calc(90% - 20px);
+  outline: none;
+  border: none;
+}
+
+button {
+  cursor: pointer;
+  background-color: rgb(225, 225, 225);
+  border: none;
+  padding: 7px;
+  font-family: Roboto;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button:hover {
+  background-color: rgb(245, 245, 245);
+}
+
+button:active {
+  background-color: rgb(200, 200, 200);
+}
+
+.split-button {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+}
+
+.split-button .main-button,
+.split-button .dropdown-button {
+  border-radius: 50px;
+  padding-left: 20px;
+  padding-right: 20px;
+  height: 35px; /* Set a fixed height for consistency */
+  margin: 0;
+}
+
+.split-button .main-button {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.split-button .dropdown-button {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.split-button .main-button {
+  margin-right: 2px; /* Add the 2px separation */
+}
+
+.split-button .dropdown-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.split-button .dropdown-button svg {
+  height: 10px;
+  width: 10px;
+}
+
+.dropdown-menu {
+  display: none; /* Initially hidden */
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  border: 1px solid rgb(200, 200, 200);
+  border-radius: 5px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  z-index: 1;
+  width: 100%;
+}
+
+.dropdown-menu ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown-menu li {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.dropdown-menu li:hover {
+  background-color: rgb(240, 240, 240);
+}
+
+#properties-form {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  background-color: white;
+  border: 1px solid rgb(200, 200, 200);
+  border-radius: 5px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  z-index: 2;
+  padding: 20px;
+  width: calc(100% - 40px);
+}
+
+#properties-form h3 {
+  margin-top: 0;
+}
+
+#font-selector {
+  margin-left: 10px;
+}
+
+#font-size-selector {
+  margin-left: 10px;
+  width: 60px;
+}

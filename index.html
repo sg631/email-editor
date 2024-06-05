@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Email Creator</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div id="add-bar">
+    <div class="split-button">
+      <button class="main-button" id="add-stuff-bttn">
+        Add Button 
+      </button>
+      <button class="dropdown-button" id="dropdown-button">
+        <svg height="10px" width="10px">
+          <!--dropdown triangle-->
+          <path d="M5 10 L0 5 L10 5 Z" />
+        </svg>
+      </button>
+      <button>-</button><input><button>+</button>
+      <div class="dropdown-menu" id="add-stuff-dropdown">
+        <ul>
+          <li data-type="button">Button</li>
+          <li data-type="fixedhighlight">Highlight</li>
+          <li data-type="colortext">Colored Text</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div id="properties-form" style="display:none;">
+    <h3>Set Properties</h3>
+    <form id="element-properties">
+      <!-- Dynamic properties inputs will be inserted here -->
+    </form>
+    <button id="toggle-advanced-properties">Show Advanced Properties</button>
+    <div id="advanced-properties" style="display:none;">
+      <h3>Advanced Properties</h3>
+      <label for="custom-html">HTML:</label><br>
+      <textarea id="custom-html" rows="4" cols="50"></textarea>
+      <label for="custom-css">CSS:</label><br>
+      <textarea id="custom-css" rows="4" cols="50"></textarea>
+      <label for="custom-js">JS:</label><br>
+      <textarea id="custom-js" rows="4" cols="50"></textarea>
+    </div>
+    <button id="add-element-bttn">Add Element</button>
+  </div>
+  <div id="editor" style="" contenteditable>Type Here</div>
+  <script src="script.js"></script>
+</body>
+
+</html>
